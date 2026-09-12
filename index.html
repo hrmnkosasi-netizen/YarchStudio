@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Karaoke Cover Studio Pro V7.3</title>
+<title>Karaoke Cover Studio Pro V8</title>
 <style>
 :root{
   --bg:#f6f7fb; --card:#fff; --card2:#fbfcff; --line:#e7e9f0; --text:#171b25; --muted:#747d8b;
@@ -300,6 +300,34 @@ body{
   .grid3{grid-template-columns:1fr 1fr}
 }
 
+
+/* V8 Ultimate Timeline Edition */
+.tabbar{grid-template-columns:repeat(7,1fr)}
+.pro-timeline{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#f8f9fc}
+.track-row{display:grid;grid-template-columns:72px 1fr;min-height:43px;border-bottom:1px solid var(--line)}
+.track-row:last-child{border-bottom:0}
+.track-label{display:flex;align-items:center;padding:0 9px;font-size:10px;font-weight:900;color:#596270;background:#f1f3f8;border-right:1px solid var(--line)}
+.track-lane{position:relative;display:flex;align-items:center;gap:4px;overflow-x:auto;padding:6px}
+.track-clip{height:28px;border-radius:8px;padding:6px 8px;font-size:9px;font-weight:700;white-space:nowrap;background:#eef0ff;border:1px solid #cdd0fb;color:#4f55c7}
+.track-clip.video{background:#eaf7f2;border-color:#cfeadd;color:#2d7c62}
+.track-clip.audio{background:#fff4e8;border-color:#f0dfc8;color:#93672d}
+.track-clip.overlay{background:#f8edf9;border-color:#ead3ec;color:#895493}
+.scene-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.scene-item{display:grid;grid-template-columns:1fr 74px 74px 30px;gap:6px;align-items:center;padding:7px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.scene-item span{font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.scene-item input{width:100%;border:1px solid var(--line);border-radius:7px;padding:6px;font-size:10px}
+.scene-item button{height:28px;border:1px solid var(--line);border-radius:7px;background:#fff;color:#b74e62}
+#beforeAfterBtn.active{background:#222;color:#fff}
+.drag-edit{cursor:ns-resize!important;outline:2px dashed rgba(111,115,242,.55);outline-offset:3px}
+@media(max-width:920px){
+  .tabbar{display:flex;overflow-x:auto;scrollbar-width:none}
+  .tabbar::-webkit-scrollbar{display:none}
+  .tabbtn{flex:0 0 78px}
+  .track-row{grid-template-columns:58px 1fr}
+  .track-label{font-size:9px;padding:0 6px}
+  .scene-item{grid-template-columns:minmax(0,1fr) 58px 58px 28px}
+}
+
 </style>
 </head>
 <body>
@@ -307,7 +335,7 @@ body{
 <header>
   <div class="brand">
     <div class="logo">K</div>
-    <div><h1>Karaoke Cover Studio Pro V7.3</h1><small>Creator Suite • Multi Platform</small></div>
+    <div><h1>Karaoke Cover Studio Pro V8</h1><small>Ultimate Timeline Edition • Multi Platform</small></div>
   </div>
   <div class="header-actions">
     <button class="btn" id="undoTop">Undo</button>
@@ -353,6 +381,7 @@ body{
     <button class="tabbtn" data-tab="design">Design</button>
     <button class="tabbtn" data-tab="audio">Audio</button>
     <button class="tabbtn" data-tab="assets">Assets</button>
+    <button class="tabbtn" data-tab="studio">Studio</button>
     <button class="tabbtn" data-tab="export">Export</button>
   </div>
 
@@ -461,7 +490,7 @@ body{
 
     <div class="section">
       <div class="section-title">WORD TIMING</div>
-      <div class="note">Pilih baris lirik. V7 membagi timing kata secara otomatis sebagai titik awal; timing bisa diperhalus manual lewat timeline/baris.</div>
+      <div class="note">Pilih baris lirik. V8 membagi timing kata secara otomatis sebagai titik awal; timing bisa diperhalus manual lewat timeline/baris.</div>
       <div class="word-editor" id="wordEditor"></div>
     </div>
   </div>
@@ -591,6 +620,167 @@ body{
     </div>
   </div>
 
+
+  <div class="tabpane" id="tab-studio">
+    <div class="section">
+      <div class="section-title">PRO TIMELINE • MULTI-TRACK</div>
+      <div class="pro-timeline" id="proTimeline">
+        <div class="track-row"><div class="track-label">VIDEO</div><div class="track-lane" id="trackVideo"></div></div>
+        <div class="track-row"><div class="track-label">AUDIO</div><div class="track-lane" id="trackAudio"></div></div>
+        <div class="track-row"><div class="track-label">LYRICS</div><div class="track-lane" id="trackLyrics"></div></div>
+        <div class="track-row"><div class="track-label">OVERLAY</div><div class="track-lane" id="trackOverlay"></div></div>
+      </div>
+      <div class="grid3" style="margin-top:8px">
+        <button class="smallbtn" id="splitLyricBtn">Split Lirik</button>
+        <button class="smallbtn" id="zoomTimelineOut">Timeline −</button>
+        <button class="smallbtn" id="zoomTimelineIn">Timeline +</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">DIRECT PREVIEW EDITING</div>
+      <div class="note">Aktifkan mode ini lalu drag lirik langsung pada preview untuk mengubah posisi vertikal. Cocok di mouse maupun layar sentuh.</div>
+      <div class="switch-card">
+        <div class="switch-copy"><b>Drag lirik di preview</b><span>Geser posisi teks langsung pada canvas.</span></div>
+        <label class="switch"><input id="directEditToggle" type="checkbox"><span class="switch-ui"></span></label>
+      </div>
+      <button class="btn" style="width:100%" id="fullscreenBtn">⛶ Fullscreen Preview</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">ADVANCED TEXT DESIGNER</div>
+      <div class="grid2">
+        <div class="field"><label>Font family</label><select id="fontFamily"><option value="Inter">Inter</option><option value="Arial">Arial</option><option value="Georgia">Georgia</option><option value="Trebuchet MS">Trebuchet</option><option value="Verdana">Verdana</option><option value="Courier New">Courier</option></select></div>
+        <div class="field"><label>Alignment</label><select id="textAlign"><option value="center">Center</option><option value="left">Left</option><option value="right">Right</option></select></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Outline</label><input id="outlineSize" type="range" min="0" max="16" value="8"></div>
+        <div class="field"><label>Shadow</label><input id="shadowSize" type="range" min="0" max="40" value="8"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Letter spacing</label><input id="letterSpacing" type="range" min="-2" max="12" step=".5" value="0"></div>
+        <div class="field"><label>Line spacing</label><input id="lineSpacing" type="range" min="85" max="180" value="118"></div>
+      </div>
+      <div class="switch-card">
+        <div class="switch-copy"><b>Background box</b><span>Kotak transparan di belakang lirik.</span></div>
+        <label class="switch"><input id="textBoxToggle" type="checkbox"><span class="switch-ui"></span></label>
+      </div>
+      <div class="field"><label>Opacity box</label><input id="textBoxOpacity" type="range" min="0" max="90" value="35"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">DUAL LANGUAGE / TRANSLATION</div>
+      <div class="field"><label>Terjemahan / Romanization</label><textarea id="translationInput" placeholder="Satu baris terjemahan untuk setiap baris lirik..."></textarea></div>
+      <div class="switch-card">
+        <div class="switch-copy"><b>Tampilkan baris kedua</b><span>Original + translation/romanization.</span></div>
+        <label class="switch"><input id="dualLyricsToggle" type="checkbox"><span class="switch-ui"></span></label>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Ukuran terjemahan</label><input id="translationSize" type="range" min="30" max="85" value="52"></div>
+        <div class="field"><label>Warna terjemahan</label><input id="translationColor" type="color" value="#ffffff"></div>
+      </div>
+      <div class="field"><label>AI Translation endpoint</label><input id="translateEndpoint" placeholder="https://server-anda/translate"></div>
+      <button class="btn primary" style="width:100%" id="translateBtn">AI Translate Lyrics</button>
+      <div class="status" id="translateStatus">Endpoint opsional. Browser mengirim JSON {lines:[...]}.</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">MULTIPLE BACKGROUNDS & SCENES</div>
+      <div class="upload"><input id="multiBgInput" type="file" accept="image/*,video/*" multiple><label for="multiBgInput"><strong>Tambah Foto / Video Scene</strong><small>Bisa pilih beberapa file sekaligus</small></label></div>
+      <div class="field" style="margin-top:9px"><label>Durasi default setiap scene (detik)</label><input id="sceneDuration" type="number" min="1" max="60" step=".5" value="6"></div>
+      <div class="field"><label>Transition</label><select id="sceneTransition"><option value="crossfade">Cross Fade</option><option value="fade">Fade</option><option value="zoom">Zoom</option><option value="none">None</option></select></div>
+      <div class="field"><label>Durasi transition</label><input id="transitionDuration" type="range" min="0" max="2" step=".1" value=".5"></div>
+      <div class="scene-list" id="sceneList"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">COLOR GRADING & FILTER</div>
+      <div class="chips" id="filterPresets">
+        <button class="chip active" data-filter="none">Original</button>
+        <button class="chip" data-filter="warm">Warm</button>
+        <button class="chip" data-filter="cool">Cool</button>
+        <button class="chip" data-filter="film">Film</button>
+        <button class="chip" data-filter="bw">B&W</button>
+        <button class="chip" data-filter="dreamy">Dreamy</button>
+      </div>
+      <div class="grid2" style="margin-top:9px">
+        <div class="field"><label>Brightness</label><input id="brightness" type="range" min="50" max="150" value="100"></div>
+        <div class="field"><label>Contrast</label><input id="contrast" type="range" min="50" max="160" value="100"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Saturation</label><input id="saturation" type="range" min="0" max="200" value="100"></div>
+        <div class="field"><label>Sepia</label><input id="sepia" type="range" min="0" max="100" value="0"></div>
+      </div>
+      <button class="btn" style="width:100%" id="beforeAfterBtn">Tahan untuk Before / After</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">VOICE + BACKING TRACK MIXER</div>
+      <div class="upload-grid">
+        <div class="upload"><input id="backingInput" type="file" accept="audio/*"><label for="backingInput"><strong>🎹 Backing Track</strong><small>Instrumental</small></label></div>
+        <div class="upload"><input id="vocalInput" type="file" accept="audio/*"><label for="vocalInput"><strong>🎙️ Vocal Track</strong><small>File vokal terpisah</small></label></div>
+      </div>
+      <div class="grid2" style="margin-top:9px">
+        <div class="field"><label>Backing volume</label><input id="backingVolume" type="range" min="0" max="150" value="100"></div>
+        <div class="field"><label>Vocal volume</label><input id="vocalVolume" type="range" min="0" max="150" value="100"></div>
+      </div>
+      <div class="grid3">
+        <button class="btn" id="recordBtn">● Record Vocal</button>
+        <button class="btn" id="stopRecordBtn" disabled>Stop</button>
+        <button class="btn" id="countInBtn">3-2-1 Record</button>
+      </div>
+      <div class="status" id="recordStatus">Siap merekam mikrofon jika browser memberi izin.</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">VOCAL EFFECTS</div>
+      <div class="grid2">
+        <div class="field"><label>Presence / EQ</label><input id="vocalPresence" type="range" min="-12" max="12" value="0"></div>
+        <div class="field"><label>Compression</label><input id="compression" type="range" min="0" max="100" value="35"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Echo</label><input id="echoAmount" type="range" min="0" max="80" value="0"></div>
+        <div class="field"><label>Reverb feel</label><input id="reverbAmount" type="range" min="0" max="80" value="0"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">SCENE / CHORUS EMPHASIS</div>
+      <div class="field"><label>Nama bagian</label><select id="sectionType"><option value="verse">Verse</option><option value="chorus">Chorus</option><option value="bridge">Bridge</option><option value="intro">Intro</option><option value="outro">Outro</option></select></div>
+      <div class="grid2">
+        <div class="field"><label>Mulai</label><input id="sectionStart" type="number" step=".1" value="0"></div>
+        <div class="field"><label>Selesai</label><input id="sectionEnd" type="number" step=".1" value="15"></div>
+      </div>
+      <button class="btn" style="width:100%" id="addSectionBtn">Tambah Bagian Lagu</button>
+      <div class="scene-list" id="songSections"></div>
+      <div class="switch-card">
+        <div class="switch-copy"><b>Chorus emphasis</b><span>Chorus otomatis lebih besar + glow.</span></div>
+        <label class="switch"><input id="chorusEmphasis" type="checkbox" checked><span class="switch-ui"></span></label>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">AI IMAGE TOOLS</div>
+      <div class="field"><label>Background Removal endpoint</label><input id="removeBgEndpoint" placeholder="https://server-anda/remove-bg"></div>
+      <button class="btn" style="width:100%" id="removeBgBtn">Remove Background dari Foto BG</button>
+      <div class="status" id="removeBgStatus">Endpoint menerima multipart field <b>file</b> dan mengembalikan gambar.</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">MY PRESETS & PROJECT DASHBOARD</div>
+      <div class="grid2">
+        <div class="field"><label>Nama preset</label><input id="presetName" placeholder="Contoh: Herman Acoustic"></div>
+        <button class="btn" id="savePresetBtn" style="align-self:end">Save My Preset</button>
+      </div>
+      <div class="chips" id="myPresets"></div>
+      <div class="grid3" style="margin-top:9px">
+        <button class="smallbtn" id="duplicateProjectBtn">Duplicate Draft</button>
+        <button class="smallbtn" id="newProjectBtn">New Project</button>
+        <button class="smallbtn" id="restoreDraftBtn">Restore Draft</button>
+      </div>
+    </div>
+  </div>
+
   <div class="tabpane" id="tab-export">
     <div class="section">
       <div class="section-title">EXPORT VIDEO</div>
@@ -598,7 +788,10 @@ body{
       <div class="field"><label>FPS</label><select id="exportFps"><option value="30">30 fps</option><option value="24">24 fps</option></select></div>
       <div class="note">Export browser menggunakan WebM dan berjalan realtime. Untuk Android atau video panjang, 720p biasanya paling stabil.</div>
       <div style="height:8px"></div>
-      <button class="btn primary" style="width:100%" id="exportBtn">Export Video</button>
+      <div class="grid2">
+        <button class="btn" id="testExportBtn">Test Export 5 Detik</button>
+        <button class="btn primary" id="exportBtn">Export Video</button>
+      </div>
       <div class="export-status" id="exportStatus">Siap export.<div class="export-progress"><div id="exportBar"></div></div></div>
     </div>
 
@@ -607,6 +800,9 @@ body{
       <div class="note" id="projectCheck">Pemeriksaan project akan muncul di sini.</div>
       <div style="height:7px"></div>
       <button class="btn" style="width:100%" id="runCheckBtn">Periksa Project</button>
+      <div style="height:8px"></div>
+      <button class="btn" style="width:100%" id="compatBtn">Compatibility Report</button>
+      <div class="note" id="compatReport" style="margin-top:8px">Belum diperiksa.</div>
     </div>
   </div>
 </section>
@@ -620,6 +816,8 @@ body{
 </div>
 
 <audio id="audio" crossorigin="anonymous"></audio>
+<audio id="backingAudio" crossorigin="anonymous"></audio>
+<audio id="vocalAudio" crossorigin="anonymous"></audio>
 <video id="video" playsinline muted preload="auto" crossorigin="anonymous" class="hidden"></video>
 
 <div class="modal hidden" id="aiModal">
@@ -643,6 +841,9 @@ let lyrics=[],selected=0,style='A',karaokeMode='line',exporting=false;
 let waveform=null,audioCtx=null,sourceNode=null,analyser=null,freqData=null;
 let undoStack=[],redoStack=[],restoring=false,thumbData=null;
 let lastAutoSave=0;
+const backingAudio=$('#backingAudio'),vocalAudio=$('#vocalAudio');
+let backingFile=null,vocalFile=null,backingNode=null,vocalNode=null,voiceRecorder=null,voiceChunks=[],recordStream=null;
+let sceneClips=[],songSections=[],timelineZoom=1,beforeAfter=false,directDragging=false;
 
 const PRESETS={
  tiktok:{name:'TikTok / Reels',w:1080,h:1920},
@@ -663,6 +864,7 @@ const st={
  intro:true,introDuration:2.5,outro:false,outroText:'Terima kasih sudah menonton',outroDuration:2.5,
  autosave:true
 };
+Object.assign(st,{fontFamily:'Inter',textAlign:'center',outlineSize:8,shadowSize:8,letterSpacing:0,lineSpacing:118,textBox:false,textBoxOpacity:35,dualLyrics:false,translationSize:52,translationColor:'#ffffff',filterPreset:'none',brightness:100,contrast:100,saturation:100,sepia:0,sceneTransition:'crossfade',transitionDuration:.5,chorusEmphasis:true});
 
 function fmt(t){if(!isFinite(t))t=0;return String(Math.floor(t/60)).padStart(2,'0')+':'+String(Math.floor(t%60)).padStart(2,'0')}
 function n(v,d=0){const x=parseFloat(v);return isFinite(x)?x:d}
@@ -717,6 +919,8 @@ function syncControlsFromState(){
  $('#introToggle').checked=st.intro;$('#introDuration').value=st.introDuration;$('#outroToggle').checked=st.outro;$('#outroText').value=st.outroText;
  $('#outroDuration').value=st.outroDuration;$('#autosaveToggle').checked=st.autosave;
  $('#fontVal').textContent=st.font;$('#yVal').textContent=st.y+'%';$('#zoomVal').textContent=st.bgZoom+'%';$('#delayLabel').textContent=st.audioDelay+' ms';
+ const ids={fontFamily:'fontFamily',textAlign:'textAlign',outlineSize:'outlineSize',shadowSize:'shadowSize',letterSpacing:'letterSpacing',lineSpacing:'lineSpacing',textBox:'textBoxToggle',textBoxOpacity:'textBoxOpacity',dualLyrics:'dualLyricsToggle',translationSize:'translationSize',translationColor:'translationColor',brightness:'brightness',contrast:'contrast',saturation:'saturation',sepia:'sepia',sceneTransition:'sceneTransition',transitionDuration:'transitionDuration',chorusEmphasis:'chorusEmphasis'};
+ Object.entries(ids).forEach(([k,id])=>{const el=$('#'+id);if(el){if(el.type==='checkbox')el.checked=!!st[k];else el.value=st[k]}});
  $$('.choice[data-style]').forEach(x=>x.classList.toggle('active',x.dataset.style===style));
  $$('.choice[data-kmode]').forEach(x=>x.classList.toggle('active',x.dataset.kmode===karaokeMode));
 }
@@ -729,12 +933,13 @@ function syncState(){
  st.audioDelay=n($('#audioDelay').value,0);st.loopVideo=$('#loopVideo').checked;st.visualizerType=$('#visualizerType').value;st.visualizerIntensity=n($('#visualizerIntensity').value,80);
  st.logoSize=n($('#logoSize').value,14);st.logoOpacity=n($('#logoOpacity').value,85);st.logoX=n($('#logoX').value,85);st.logoY=n($('#logoY').value,12);
  st.intro=$('#introToggle').checked;st.introDuration=n($('#introDuration').value,2.5);st.outro=$('#outroToggle').checked;st.outroText=$('#outroText').value;st.outroDuration=n($('#outroDuration').value,2.5);
+ st.fontFamily=$('#fontFamily')?.value||st.fontFamily;st.textAlign=$('#textAlign')?.value||st.textAlign;st.outlineSize=n($('#outlineSize')?.value,st.outlineSize);st.shadowSize=n($('#shadowSize')?.value,st.shadowSize);st.letterSpacing=n($('#letterSpacing')?.value,st.letterSpacing);st.lineSpacing=n($('#lineSpacing')?.value,st.lineSpacing);st.textBox=!!$('#textBoxToggle')?.checked;st.textBoxOpacity=n($('#textBoxOpacity')?.value,st.textBoxOpacity);st.dualLyrics=!!$('#dualLyricsToggle')?.checked;st.translationSize=n($('#translationSize')?.value,st.translationSize);st.translationColor=$('#translationColor')?.value||st.translationColor;st.brightness=n($('#brightness')?.value,100);st.contrast=n($('#contrast')?.value,100);st.saturation=n($('#saturation')?.value,100);st.sepia=n($('#sepia')?.value,0);st.sceneTransition=$('#sceneTransition')?.value||'crossfade';st.transitionDuration=n($('#transitionDuration')?.value,.5);st.chorusEmphasis=!!$('#chorusEmphasis')?.checked;
  $('#fontVal').textContent=st.font;$('#yVal').textContent=st.y+'%';$('#zoomVal').textContent=st.bgZoom+'%';$('#delayLabel').textContent=st.audioDelay+' ms';
  if(audio.src)audio.volume=clamp(st.volume/100,0,1);video.loop=st.loopVideo;scheduleAutosave();
 }
 ['titleInput','artistInput','fontSize','lyricY','textColor','highlightColor','darkness','bgZoom','bgX','bgY','bgBlur','safeArea','textAnim','lyricLayout',
 'audioVolume','trimStart','trimEnd','fadeIn','fadeOut','audioDelay','loopVideo','visualizerType','visualizerIntensity','logoSize','logoOpacity','logoX','logoY',
-'introToggle','introDuration','outroToggle','outroText','outroDuration'].forEach(id=>{
+'introToggle','introDuration','outroToggle','outroText','outroDuration','fontFamily','textAlign','outlineSize','shadowSize','letterSpacing','lineSpacing','textBoxToggle','textBoxOpacity','dualLyricsToggle','translationSize','translationColor','brightness','contrast','saturation','sepia','sceneTransition','transitionDuration','chorusEmphasis'].forEach(id=>{
  const el=$('#'+id);el.addEventListener('input',syncState);el.addEventListener('change',()=>{syncState();pushHistory()});
 });
 
@@ -816,9 +1021,9 @@ async function playPause(){
  if(m===audio){setupAnalyser();if(audioCtx?.state==='suspended')await audioCtx.resume()}
  if(m.paused){
   if(m.currentTime<effectiveStart()||m.currentTime>=projectEnd())m.currentTime=effectiveStart();
-  await m.play();
+  await m.play();setupExtraAudio();syncExtraTracks();for(const x of [backingAudio,vocalAudio]){if(x.src)try{await x.play()}catch(e){}}
   if(video.src&&m!==video){try{video.currentTime=clamp(m.currentTime+st.audioDelay/1000,0,video.duration||m.currentTime);await video.play()}catch(e){}}
- }else{m.pause();if(video.src&&m!==video)video.pause()}
+ }else{m.pause();for(const x of [backingAudio,vocalAudio])if(x.src)x.pause();if(video.src&&m!==video)video.pause()}
 }
 $('#playBtn').onclick=playPause;
 $('#backBtn').onclick=()=>{const m=activeMedia();m.currentTime=clamp(mediaTime()-5,effectiveStart(),projectEnd());if(video.src&&m!==video)video.currentTime=clamp(m.currentTime+st.audioDelay/1000,0,video.duration||m.currentTime)};
@@ -857,7 +1062,7 @@ function renderLyrics(scroll=true){
   const [s,e,t,d]=r.children;
   s.onchange=ev=>{pushHistory();l.start=n(ev.target.value);l.words=makeWords(l);renderTimelineBlocks()};
   e.onchange=ev=>{pushHistory();l.end=n(ev.target.value);l.words=makeWords(l);renderTimelineBlocks()};
-  t.oninput=ev=>{l.text=ev.target.value;l.words=makeWords(l);renderWordEditor();renderTimelineBlocks();scheduleAutosave()};
+  t.oninput=ev=>{l.text=ev.target.value;l.words=makeWords(l);renderWordEditor();renderTimelineBlocks();if(typeof renderProTimeline==='function')renderProTimeline();scheduleAutosave()};
   d.onclick=ev=>{ev.stopPropagation();pushHistory();lyrics.splice(i,1);selected=clamp(selected,0,Math.max(0,lyrics.length-1));renderLyrics()};
   box.appendChild(r)
  });
@@ -892,7 +1097,7 @@ function cover(media){
  const mw=media.videoWidth||media.naturalWidth||media.width,mh=media.videoHeight||media.naturalHeight||media.height;if(!mw||!mh)return;
  const W=canvas.width,H=canvas.height,mr=mw/mh,rr=W/H;let sx=0,sy=0,sw=mw,sh=mh;if(mr>rr){sw=mh*rr;sx=(mw-sw)/2}else{sh=mw/rr;sy=(mh-sh)/2}
  const z=Math.max(1,st.bgZoom/100),cw=sw/z,ch=sh/z;sx+=(sw-cw)/2+(st.bgX/100)*Math.max(0,(sw-cw)/2);sy+=(sh-ch)/2+(st.bgY/100)*Math.max(0,(sh-ch)/2);
- sx=clamp(sx,0,mw-cw);sy=clamp(sy,0,mh-ch);ctx.save();ctx.filter=st.bgBlur?`blur(${st.bgBlur}px)`:'none';const pad=st.bgBlur?st.bgBlur*2:0;ctx.drawImage(media,sx,sy,cw,ch,-pad,-pad,W+pad*2,H+pad*2);ctx.restore()
+ sx=clamp(sx,0,mw-cw);sy=clamp(sy,0,mh-ch);ctx.save();const grade=beforeAfter?'':` brightness(${st.brightness||100}%) contrast(${st.contrast||100}%) saturate(${st.saturation||100}%) sepia(${st.sepia||0}%)`;ctx.filter=(st.bgBlur?`blur(${st.bgBlur}px)`:'')+grade;const pad=st.bgBlur?st.bgBlur*2:0;ctx.drawImage(media,sx,sy,cw,ch,-pad,-pad,W+pad*2,H+pad*2);ctx.restore()
 }
 function wrap(text,max,font){ctx.font=font;const words=String(text||'').split(/\s+/),out=[];let line='';for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>max&&line){out.push(line);line=word}else line=test}if(line)out.push(line);return out}
 function currentLine(t){return lyrics.findIndex(l=>t>=l.start&&t<l.end)}
@@ -919,7 +1124,14 @@ function animTransform(t,line){
 }
 function draw(){
  syncState();const W=canvas.width,H=canvas.height,t=mediaTime();ctx.clearRect(0,0,W,H);
- if(video.src&&video.readyState>=2){try{cover(video)}catch(e){}}else if(bgImage)cover(bgImage);else{
+ const activeScene=sceneClips.find(c=>t>=c.start&&t<c.end);
+ if(activeScene&&activeScene.media){
+   const local=Math.max(0,t-activeScene.start);
+   if(activeScene.type==='video'&&activeScene.media.readyState>=2){
+     if(Math.abs(activeScene.media.currentTime-local)>0.22)try{activeScene.media.currentTime=Math.min(local,activeScene.media.duration||local)}catch(e){}
+     try{cover(activeScene.media)}catch(e){}
+   }else if(activeScene.type==='image'){cover(activeScene.media)}
+ }else if(video.src&&video.readyState>=2){try{cover(video)}catch(e){}}else if(bgImage)cover(bgImage);else{
   const g=ctx.createLinearGradient(0,0,0,H);
   if(style==='A'){g.addColorStop(0,'#d7e1f7');g.addColorStop(.55,'#f4d7d0');g.addColorStop(1,'#8d98bd')}
   else if(style==='B'){g.addColorStop(0,'#f5f1e8');g.addColorStop(1,'#d9dfeb')}
@@ -946,8 +1158,9 @@ function draw(){
    const tr=animTransform(t,line);ctx.save();ctx.globalAlpha=tr.alpha;ctx.translate(W/2,base+tr.dy);ctx.scale(tr.scale,tr.scale);ctx.translate(-W/2,-base);ctx.filter=tr.blur?`blur(${tr.blur}px)`:'none';
    if(tr.glow){ctx.shadowColor=st.hi;ctx.shadowBlur=tr.glow}
    if(prev&&karaokeMode!=='twoLine'){ctx.fillStyle='rgba(255,255,255,.5)';ctx.font=`600 ${Math.max(22,eff*.56)}px Inter,Arial`;ctx.fillText(prev.text,W/2,base-eff*1.6)}
-   const font=`800 ${eff}px Inter,Arial`,lines=wrap(line.text,W-side*2,font);ctx.font=font;ctx.lineWidth=Math.max(4,eff*.13);ctx.strokeStyle='rgba(0,0,0,.42)';
-   lines.forEach((txt,j)=>{const y=base+j*eff*1.18;if(style!=='B')ctx.strokeText(txt,W/2,y);
+   let chorusBoost=1;const sec=songSections.find(s=>t>=s.start&&t<s.end);if(st.chorusEmphasis&&sec?.type==='chorus')chorusBoost=1.13;
+   const eff2=eff*chorusBoost,font=`800 ${eff2}px "${st.fontFamily||'Inter'}",Arial`,lines=wrap(line.text,W-side*2,font);ctx.font=font;ctx.textAlign=st.textAlign||'center';ctx.lineWidth=Math.max(0,st.outlineSize||0);ctx.strokeStyle='rgba(0,0,0,.55)';ctx.shadowColor=sec?.type==='chorus'?'rgba(255,216,77,.75)':'rgba(0,0,0,.45)';ctx.shadowBlur=(st.shadowSize||0)+(sec?.type==='chorus'?16:0);
+   lines.forEach((txt,j)=>{const y=base+j*eff2*((st.lineSpacing||118)/100);if(st.textBox){const tw=ctx.measureText(txt).width,pad=eff2*.22;ctx.save();ctx.fillStyle=`rgba(0,0,0,${(st.textBoxOpacity||35)/100})`;ctx.fillRect(W/2-tw/2-pad,y-eff2*.86,tw+pad*2,eff2*1.15);ctx.restore()} if(style!=='B'&&st.outlineSize>0)ctx.strokeText(txt,W/2,y);
      if(karaokeMode==='word'&&line.words?.length){
        const wi=line.words.findIndex(w=>t>=w.start&&t<w.end);let built='';line.words.forEach((wd,k)=>{built+=(k?' ':'')+wd.text});
        ctx.fillStyle=st.text;ctx.fillText(txt,W/2,y);
@@ -957,6 +1170,7 @@ function draw(){
      }else{ctx.fillStyle=idx>=0?st.hi:st.text;ctx.fillText(txt,W/2,y)}
    });
    if(next){ctx.fillStyle='rgba(255,255,255,.55)';ctx.font=`600 ${Math.max(22,eff*.56)}px Inter,Arial`;ctx.fillText(next.text,W/2,base+lines.length*eff*1.18+eff*.9)}
+   if(st.dualLyrics){const trLines=$('#translationInput')?.value.split(/\n/)||[],tt=trLines[idx]||'';if(tt){ctx.shadowBlur=4;ctx.fillStyle=st.translationColor||'#fff';ctx.font=`600 ${Math.max(20,eff2*(st.translationSize||52)/100)}px "${st.fontFamily||'Inter'}",Arial`;ctx.textAlign='center';ctx.fillText(tt,W/2,base+lines.length*eff2*((st.lineSpacing||118)/100)+eff2*.68)}}
    ctx.restore()
   }
  }
@@ -987,10 +1201,10 @@ $('#exportLrc').onclick=()=>dlText('lyrics.lrc',lyrics.map(l=>`[${String(Math.fl
 $('#exportVtt').onclick=()=>dlText('lyrics.vtt','WEBVTT\n\n'+lyrics.map((l,i)=>`${i+1}\n${srtTime(l.start).replace(',','.')} --> ${srtTime(l.end).replace(',','.')}\n${l.text}\n`).join('\n'));
 
 function saveProject(){
- syncState();const data={version:7,state:{...st,style,karaokeMode},lyrics};dlText((st.title||'karaoke-project').replace(/[^\w\-]+/g,'_')+'.json',JSON.stringify(data,null,2),'application/json')
+ syncState();const data={version:8,state:{...st,style,karaokeMode},lyrics,translation:$('#translationInput')?.value||'',songSections,sceneMetadata:sceneClips.map(c=>({name:c.name,type:c.type,start:c.start,end:c.end}))};dlText((st.title||'karaoke-project').replace(/[^\w\-]+/g,'_')+'.json',JSON.stringify(data,null,2),'application/json')
 }
 async function loadProject(file){
- try{const d=JSON.parse(await file.text());pushHistory();Object.assign(st,d.state||{});style=d.state?.style||'A';karaokeMode=d.state?.karaokeMode||'line';lyrics=d.lyrics||[];ensureWords();syncControlsFromState();
+ try{const d=JSON.parse(await file.text());pushHistory();Object.assign(st,d.state||{});style=d.state?.style||'A';karaokeMode=d.state?.karaokeMode||'line';lyrics=d.lyrics||[];songSections=d.songSections||[];if($('#translationInput'))$('#translationInput').value=d.translation||'';ensureWords();syncControlsFromState();
  if(st.platform==='custom'){$('#customW').value=st.w||1080;$('#customH').value=st.h||1920}applyPlatform(st.platform||'tiktok',true);renderLyrics()}catch(e){alert('Project tidak valid.')}
 }
 $('#projectInput').onchange=e=>{if(e.target.files[0])loadProject(e.target.files[0])};$('#loadProjectBtn').onclick=()=>$('#projectInput').click();
@@ -1009,6 +1223,105 @@ function captureThumbnail(){
 }
 $('#captureThumbBtn').onclick=captureThumbnail;$('#downloadThumbBtn').onclick=()=>{if(!thumbData)captureThumbnail();const a=document.createElement('a');a.href=thumbData;a.download=(st.title||'thumbnail').replace(/[^\w\-]+/g,'_')+'_thumbnail.png';a.click()};
 
+
+function setupExtraAudio(){
+ setupAnalyser();
+ if(!audioCtx||!analyser)return;
+ try{
+  if(backingAudio.src&&!backingNode){backingNode=audioCtx.createMediaElementSource(backingAudio);backingNode.connect(analyser)}
+  if(vocalAudio.src&&!vocalNode){vocalNode=audioCtx.createMediaElementSource(vocalAudio);vocalNode.connect(analyser)}
+ }catch(e){console.warn('extra audio',e)}
+}
+function syncExtraTracks(){
+ const t=mediaTime();
+ [backingAudio,vocalAudio].forEach(a=>{if(a.src&&Math.abs(a.currentTime-t)>.18)try{a.currentTime=Math.min(t,a.duration||t)}catch(e){}});
+}
+$('#backingInput').onchange=e=>{const f=e.target.files[0];if(!f)return;backingFile=f;backingAudio.src=URL.createObjectURL(f);backingAudio.load();$('#recordStatus').textContent='Backing track siap.';renderProTimeline()};
+$('#vocalInput').onchange=e=>{const f=e.target.files[0];if(!f)return;vocalFile=f;vocalAudio.src=URL.createObjectURL(f);vocalAudio.load();$('#recordStatus').textContent='Vocal track siap.';renderProTimeline()};
+$('#backingVolume').oninput=()=>backingAudio.volume=clamp(n($('#backingVolume').value,100)/100,0,1);
+$('#vocalVolume').oninput=()=>vocalAudio.volume=clamp(n($('#vocalVolume').value,100)/100,0,1);
+
+async function startVoiceRecord(withCount=false){
+ if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder)return alert('Browser tidak mendukung perekaman mikrofon.');
+ if(withCount){$('#recordStatus').textContent='3...';await new Promise(r=>setTimeout(r,700));$('#recordStatus').textContent='2...';await new Promise(r=>setTimeout(r,700));$('#recordStatus').textContent='1...';await new Promise(r=>setTimeout(r,700))}
+ try{
+  recordStream=await navigator.mediaDevices.getUserMedia({audio:true});voiceChunks=[];voiceRecorder=new MediaRecorder(recordStream);
+  voiceRecorder.ondataavailable=e=>{if(e.data.size)voiceChunks.push(e.data)};
+  voiceRecorder.onstop=()=>{const blob=new Blob(voiceChunks,{type:voiceRecorder.mimeType||'audio/webm'});vocalFile=new File([blob],'recorded-vocal.webm',{type:blob.type});vocalAudio.src=URL.createObjectURL(blob);vocalAudio.load();recordStream?.getTracks().forEach(t=>t.stop());$('#recordStatus').textContent='Rekaman vokal siap digunakan.';$('#recordBtn').disabled=false;$('#stopRecordBtn').disabled=true;renderProTimeline()};
+  voiceRecorder.start(500);$('#recordStatus').textContent='Merekam vokal...';$('#recordBtn').disabled=true;$('#stopRecordBtn').disabled=false
+ }catch(e){$('#recordStatus').textContent='Mikrofon gagal: '+e.message}
+}
+$('#recordBtn').onclick=()=>startVoiceRecord(false);$('#countInBtn').onclick=()=>startVoiceRecord(true);$('#stopRecordBtn').onclick=()=>{if(voiceRecorder?.state==='recording')voiceRecorder.stop()};
+
+function renderProTimeline(){
+ const dur=Math.max(mediaDuration(),lyrics.at(-1)?.end||30,1),scale=timelineZoom;
+ const lane=(id,clips)=>{const el=$(id);if(!el)return;el.innerHTML='';clips.forEach(c=>{const b=document.createElement('button');b.className='track-clip '+(c.kind||'');b.style.minWidth=Math.max(65,(c.end-c.start)/dur*520*scale)+'px';b.textContent=c.label;b.onclick=()=>{const m=activeMedia();if(m.src)m.currentTime=c.start};el.appendChild(b)})};
+ lane('#trackVideo',[...(video.src?[{start:0,end:dur,label:'Main Video',kind:'video'}]:[]),...sceneClips.map((c,i)=>({start:c.start,end:c.end,label:'Scene '+(i+1),kind:'video'}))]);
+ lane('#trackAudio',[...(audio.src?[{start:0,end:dur,label:'Main Audio',kind:'audio'}]:[]),...(backingAudio.src?[{start:0,end:dur,label:'Backing',kind:'audio'}]:[]),...(vocalAudio.src?[{start:0,end:dur,label:'Vocal',kind:'audio'}]:[])]);
+ lane('#trackLyrics',lyrics.map(l=>({start:l.start,end:l.end,label:l.text,kind:''})));
+ lane('#trackOverlay',logoImage?[{start:0,end:dur,label:'Watermark',kind:'overlay'}]:[]);
+}
+$('#zoomTimelineIn').onclick=()=>{timelineZoom=Math.min(3,timelineZoom+.25);renderProTimeline()};
+$('#zoomTimelineOut').onclick=()=>{timelineZoom=Math.max(.5,timelineZoom-.25);renderProTimeline()};
+$('#splitLyricBtn').onclick=()=>{const l=lyrics[selected],t=mediaTime();if(!l||t<=l.start||t>=l.end)return alert('Posisikan playhead di tengah baris lirik.');pushHistory();const a={...l,end:t,text:l.text,words:[]},b={...l,start:t,text:l.text,words:[]};a.words=makeWords(a);b.words=makeWords(b);lyrics.splice(selected,1,a,b);renderLyrics();renderProTimeline()};
+
+$('#directEditToggle').onchange=()=>$('#stage').classList.toggle('drag-edit',$('#directEditToggle').checked);
+canvas.addEventListener('pointerdown',e=>{if(!$('#directEditToggle').checked)return;directDragging=true;canvas.setPointerCapture?.(e.pointerId)});
+canvas.addEventListener('pointermove',e=>{if(!directDragging)return;const r=canvas.getBoundingClientRect(),py=clamp((e.clientY-r.top)/r.height*100,20,90);$('#lyricY').value=py;syncState()});
+canvas.addEventListener('pointerup',()=>{if(directDragging){directDragging=false;pushHistory()}});
+$('#fullscreenBtn').onclick=()=>{const el=$('#stage');if(!document.fullscreenElement)el.requestFullscreen?.();else document.exitFullscreen?.()};
+
+$('#translationInput').oninput=scheduleAutosave;
+$('#translateBtn').onclick=async()=>{
+ const ep=$('#translateEndpoint').value.trim(),lines=lyrics.map(l=>l.text);if(!ep)return $('#translateStatus').textContent='Masukkan endpoint translation.';
+ try{$('#translateStatus').textContent='Menerjemahkan...';const r=await fetch(ep,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lines})});if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();const out=d.lines||d.translations;if(!Array.isArray(out))throw new Error('Response harus memiliki array lines/translations');$('#translationInput').value=out.join('\n');$('#dualLyricsToggle').checked=true;syncState();$('#translateStatus').textContent='Terjemahan selesai.'}catch(e){$('#translateStatus').textContent='Gagal: '+e.message}
+};
+
+$('#multiBgInput').onchange=async e=>{
+ const files=[...e.target.files];if(!files.length)return;let start=sceneClips.length?sceneClips.at(-1).end:effectiveStart(),dur=n($('#sceneDuration').value,6);
+ for(const f of files){
+  if(f.type.startsWith('image/')){const im=new Image();im.src=URL.createObjectURL(f);await new Promise(r=>im.onload=r);sceneClips.push({name:f.name,type:'image',media:im,start,end:start+dur,file:f});start+=dur}
+  else if(f.type.startsWith('video/')){const v=document.createElement('video');v.src=URL.createObjectURL(f);v.muted=true;v.playsInline=true;v.preload='auto';await new Promise(r=>{v.onloadedmetadata=r;v.onerror=r});const dd=isFinite(v.duration)&&v.duration>0?Math.min(v.duration,dur):dur;sceneClips.push({name:f.name,type:'video',media:v,start,end:start+dd,file:f});start+=dd}
+ }
+ renderSceneList();renderProTimeline()
+};
+function renderSceneList(){
+ const el=$('#sceneList');el.innerHTML='';sceneClips.forEach((c,i)=>{const row=document.createElement('div');row.className='scene-item';row.innerHTML=`<span title="${esc(c.name)}">${esc(c.name)}</span><input type="number" step=".1" value="${c.start.toFixed(1)}"><input type="number" step=".1" value="${c.end.toFixed(1)}"><button>×</button>`;const [nm,s,e,b]=row.children;s.onchange=()=>{c.start=n(s.value,c.start);renderProTimeline()};e.onchange=()=>{c.end=Math.max(c.start+.1,n(e.value,c.end));renderProTimeline()};b.onclick=()=>{sceneClips.splice(i,1);renderSceneList();renderProTimeline()};el.appendChild(row)})
+}
+$$('#filterPresets .chip').forEach?.(()=>{});
+$$('.chip[data-filter]').forEach(b=>b.onclick=()=>{st.filterPreset=b.dataset.filter;$$('.chip[data-filter]').forEach(x=>x.classList.toggle('active',x===b));const p={none:[100,100,100,0],warm:[106,108,118,12],cool:[101,104,92,0],film:[96,118,88,18],bw:[100,115,0,0],dreamy:[112,92,118,8]}[b.dataset.filter];$('#brightness').value=p[0];$('#contrast').value=p[1];$('#saturation').value=p[2];$('#sepia').value=p[3];syncState()});
+$('#beforeAfterBtn').onpointerdown=()=>{beforeAfter=true;$('#beforeAfterBtn').classList.add('active')};['pointerup','pointerleave','pointercancel'].forEach(ev=>$('#beforeAfterBtn').addEventListener(ev,()=>{beforeAfter=false;$('#beforeAfterBtn').classList.remove('active')}));
+
+$('#addSectionBtn').onclick=()=>{const s={type:$('#sectionType').value,start:n($('#sectionStart').value),end:n($('#sectionEnd').value,15)};if(s.end<=s.start)return alert('Waktu selesai harus lebih besar.');songSections.push(s);renderSongSections()};
+function renderSongSections(){const el=$('#songSections');el.innerHTML='';songSections.forEach((s,i)=>{const r=document.createElement('div');r.className='scene-item';r.innerHTML=`<span>${s.type.toUpperCase()}</span><input value="${s.start.toFixed(1)}"><input value="${s.end.toFixed(1)}"><button>×</button>`;r.children[1].onchange=()=>s.start=n(r.children[1].value);r.children[2].onchange=()=>s.end=n(r.children[2].value);r.children[3].onclick=()=>{songSections.splice(i,1);renderSongSections()};el.appendChild(r)})}
+
+$('#removeBgBtn').onclick=async()=>{
+ const ep=$('#removeBgEndpoint').value.trim(),f=$('#imageInput').files[0];if(!ep)return $('#removeBgStatus').textContent='Masukkan endpoint.';if(!f)return $('#removeBgStatus').textContent='Upload Foto BG terlebih dahulu.';
+ try{$('#removeBgStatus').textContent='Memproses...';const fd=new FormData();fd.append('file',f,f.name);const r=await fetch(ep,{method:'POST',body:fd});if(!r.ok)throw new Error('HTTP '+r.status);const blob=await r.blob();const im=new Image();im.onload=()=>{bgImage=im;$('#removeBgStatus').textContent='Background berhasil dihapus.'};im.src=URL.createObjectURL(blob)}catch(e){$('#removeBgStatus').textContent='Gagal: '+e.message}
+};
+
+function renderMyPresets(){
+ const box=$('#myPresets');box.innerHTML='';let arr=[];try{arr=JSON.parse(localStorage.getItem('karaokeV8Presets')||'[]')}catch(e){}
+ arr.forEach((p,i)=>{const b=document.createElement('button');b.className='chip';b.textContent=p.name;b.onclick=()=>{Object.assign(st,p.state);style=p.style||style;karaokeMode=p.karaokeMode||karaokeMode;syncControlsFromState();applyPlatform(st.platform||'tiktok',true)};box.appendChild(b)})
+}
+$('#savePresetBtn').onclick=()=>{const name=$('#presetName').value.trim();if(!name)return alert('Masukkan nama preset.');let arr=[];try{arr=JSON.parse(localStorage.getItem('karaokeV8Presets')||'[]')}catch(e){}arr.push({name,state:{...st},style,karaokeMode});localStorage.setItem('karaokeV8Presets',JSON.stringify(arr.slice(-12)));renderMyPresets()};
+$('#duplicateProjectBtn').onclick=()=>{localStorage.setItem('karaokeV8Duplicate',JSON.stringify(captureState()));$('#autosaveStatus').textContent='Draft duplicate tersimpan.'};
+$('#restoreDraftBtn').onclick=()=>{try{const d=JSON.parse(localStorage.getItem('karaokeV8Duplicate')||'null');if(d)restoreSnapshot(d);else alert('Belum ada duplicate draft.')}catch(e){}};
+$('#newProjectBtn').onclick=()=>{if(confirm('Buat project baru? Media lokal tetap perlu di-upload ulang.'))location.reload()};
+
+function compatibilityReport(){
+ const rows=[];rows.push('MediaRecorder: '+(!!window.MediaRecorder?'OK':'Tidak'));rows.push('Canvas captureStream: '+(!!canvas.captureStream?'OK':'Tidak'));rows.push('WebM VP9: '+(window.MediaRecorder?.isTypeSupported?.('video/webm;codecs=vp9,opus')?'OK':'Fallback'));rows.push('Microphone: '+(!!navigator.mediaDevices?.getUserMedia?'OK':'Tidak'));rows.push('Fullscreen: '+(!!document.fullscreenEnabled?'OK':'Tidak'));rows.push('Device memory: '+(navigator.deviceMemory?navigator.deviceMemory+' GB':'tidak tersedia'));const rec=(navigator.deviceMemory&&navigator.deviceMemory<=4)?'720p direkomendasikan':'1080p biasanya aman';$('#compatReport').textContent=rows.join(' • ')+' • '+rec}
+$('#compatBtn').onclick=compatibilityReport;
+
+async function testExport5(){
+ if(exporting)return;const m=activeMedia();if(!m.src)return alert('Upload media dulu.');if(!window.MediaRecorder||!canvas.captureStream)return alert('Browser tidak mendukung test export.');
+ const start=mediaTime(),end=Math.min(projectEnd(),start+5);if(end<=start+.1)return alert('Sisa durasi kurang dari 5 detik.');
+ exporting=true;const ow=canvas.width,oh=canvas.height;canvas.width=720;canvas.height=Math.round(720*st.h/st.w);let dest=null;
+ try{if(audio.src){setupAnalyser();setupExtraAudio();if(audioCtx?.state==='suspended')await audioCtx.resume()}const cs=canvas.captureStream(24);let stream=cs;if(audio.src&&audioCtx&&analyser){dest=audioCtx.createMediaStreamDestination();analyser.connect(dest);stream=new MediaStream([...cs.getVideoTracks(),...dest.stream.getAudioTracks()])}const mime=['video/webm;codecs=vp8,opus','video/webm'].find(x=>MediaRecorder.isTypeSupported(x))||'';const chunks=[],rec=new MediaRecorder(stream,mime?{mimeType:mime,videoBitsPerSecond:3500000}:{videoBitsPerSecond:3500000});rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);rec.onstop=()=>{const b=new Blob(chunks,{type:mime||'video/webm'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='test_export_5s.webm';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);if(dest)try{analyser.disconnect(dest)}catch(e){}canvas.width=ow;canvas.height=oh;m.pause();m.currentTime=start;exporting=false};rec.start(500);m.currentTime=start;await m.play();const iv=setInterval(()=>{if(mediaTime()>=end){clearInterval(iv);m.pause();rec.stop()}},100)}catch(e){canvas.width=ow;canvas.height=oh;exporting=false;alert('Test export gagal: '+e.message)}
+}
+$('#testExportBtn').onclick=testExport5;
+renderMyPresets();compatibilityReport();renderProTimeline();
+
 function projectCheck(){
  const issues=[];if(!audio.src&&!video.src)issues.push('Belum ada audio/video.');if(!lyrics.length)issues.push('Belum ada lirik.');if(videoFile&&!/video\/(mp4|webm)/.test(videoFile.type))issues.push('Codec video mungkin kurang kompatibel di Android.');if(projectEnd()<=effectiveStart())issues.push('Trim akhir harus setelah trim mulai.');
  $('#projectCheck').textContent=issues.length?'Perlu diperiksa: '+issues.join(' '):'Project terlihat siap. Media, timing, dan rentang export valid.'
@@ -1022,7 +1335,7 @@ async function exportVideo(){
  const ow=canvas.width,oh=canvas.height,d=platformDims(),mode=$('#exportSize').value;let ew=d.w,eh=d.h;if(mode!=='native'){const mx=+mode;if(ew>=eh){if(ew>mx){eh=Math.round(eh*mx/ew);ew=mx}}else{if(ew>mx){eh=Math.round(eh*mx/ew);ew=mx}}}ew=Math.max(2,Math.round(ew/2)*2);eh=Math.max(2,Math.round(eh/2)*2);canvas.width=ew;canvas.height=eh;
  let dest=null;
  try{
-  if(audio.src){setupAnalyser();if(audioCtx?.state==='suspended')await audioCtx.resume()}
+  if(audio.src){setupAnalyser();setupExtraAudio();if(audioCtx?.state==='suspended')await audioCtx.resume()}
   const fps=+$('#exportFps').value||30,cs=canvas.captureStream(fps);let stream=cs;
   if(audio.src&&audioCtx&&analyser){dest=audioCtx.createMediaStreamDestination();analyser.connect(dest);stream=new MediaStream([...cs.getVideoTracks(),...dest.stream.getAudioTracks()])}
   const cand=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'],mime=cand.find(x=>MediaRecorder.isTypeSupported(x))||'',opts={videoBitsPerSecond:Math.max(ew,eh)>=1600?8000000:4500000};if(mime)opts.mimeType=mime;
@@ -1030,8 +1343,8 @@ async function exportVideo(){
   rec.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
   rec.onstop=()=>{const b=new Blob(chunks,{type:mime||'video/webm'});if(!b.size)alert('Export menghasilkan file kosong.');else{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=(st.title||'karaoke').replace(/[^\w\-]+/g,'_')+'.webm';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3000)}cleanup();status.firstChild.textContent='Export selesai. ';bar.style.width='100%'};
   function cleanup(){if(dest&&analyser)try{analyser.disconnect(dest)}catch(e){}canvas.width=ow;canvas.height=oh;exporting=false;['exportBtn','exportTop','exportMobile'].forEach(id=>$('#'+id).textContent=id==='exportTop'?'Export':id==='exportMobile'?'Export':'Export Video')}
-  m.pause();m.currentTime=effectiveStart();if(video.src&&m!==video){video.pause();video.currentTime=clamp(m.currentTime+st.audioDelay/1000,0,video.duration||m.currentTime)}await new Promise(r=>setTimeout(r,180));rec.start(1000);await m.play();if(video.src&&m!==video)try{await video.play()}catch(e){}
-  const timer=setInterval(()=>{const a=effectiveStart(),b=projectEnd(),p=clamp((mediaTime()-a)/Math.max(.01,b-a),0,1);bar.style.width=(p*100).toFixed(1)+'%';status.firstChild.textContent='Merekam '+Math.round(p*100)+'% • '+fmt(mediaTime()-a)+' / '+fmt(b-a)+' ';if(mediaTime()>=b){m.pause();if(video.src&&m!==video)video.pause();clearInterval(timer);if(rec.state!=='inactive')rec.stop()}},400)
+  m.pause();m.currentTime=effectiveStart();if(video.src&&m!==video){video.pause();video.currentTime=clamp(m.currentTime+st.audioDelay/1000,0,video.duration||m.currentTime)}await new Promise(r=>setTimeout(r,180));rec.start(1000);await m.play();syncExtraTracks();for(const x of [backingAudio,vocalAudio]){if(x.src)try{await x.play()}catch(e){}}if(video.src&&m!==video)try{await video.play()}catch(e){}
+  const timer=setInterval(()=>{const a=effectiveStart(),b=projectEnd(),p=clamp((mediaTime()-a)/Math.max(.01,b-a),0,1);bar.style.width=(p*100).toFixed(1)+'%';status.firstChild.textContent='Merekam '+Math.round(p*100)+'% • '+fmt(mediaTime()-a)+' / '+fmt(b-a)+' ';if(mediaTime()>=b){m.pause();for(const x of [backingAudio,vocalAudio])if(x.src)x.pause();if(video.src&&m!==video)video.pause();clearInterval(timer);if(rec.state!=='inactive')rec.stop()}},400)
  }catch(e){canvas.width=ow;canvas.height=oh;exporting=false;alert('Export gagal: '+e.message)}
 }
 ['exportBtn','exportTop','exportMobile'].forEach(id=>$('#'+id).onclick=exportVideo);
