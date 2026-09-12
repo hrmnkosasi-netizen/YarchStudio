@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Karaoke Cover Studio Pro V7.2</title>
+<title>Karaoke Cover Studio Pro V7.3</title>
 <style>
 :root{
   --bg:#f6f7fb; --card:#fff; --card2:#fbfcff; --line:#e7e9f0; --text:#171b25; --muted:#747d8b;
@@ -222,6 +222,84 @@ input[type=range]{width:100%;accent-color:var(--primary)}
   }
 }
 
+
+/* V7.3 — typography readability upgrade */
+:root{
+  --ui-scale:1.14;
+}
+body{
+  font-size:15px;
+}
+.brand h1{font-size:17px}
+.brand small{font-size:11px}
+.preview-head b{font-size:13px}
+.pill{font-size:11px;padding:5px 8px}
+.btn,.iconbtn{font-size:14px;padding:10px 13px}
+.tabbtn{font-size:11px;font-weight:700}
+.section-title{font-size:11px;letter-spacing:.8px}
+.field label{font-size:11px}
+.field input,.field select,.field textarea{font-size:15px;padding:11px 12px}
+.field textarea{line-height:1.55}
+.note{font-size:11px;line-height:1.55}
+.status{font-size:11px}
+.switch-copy b{font-size:12px}
+.switch-copy span{font-size:10px;line-height:1.35}
+.chip{font-size:10px;padding:8px 11px}
+.choice b{font-size:12px}
+.choice small{font-size:10px;line-height:1.35}
+.template-name{font-size:10px}
+.smallbtn{font-size:11px;padding:8px 10px}
+.lyric-row input{font-size:11px}
+.word-chip{font-size:10px}
+.timeline-head b{font-size:12px}
+.timeline-head span{font-size:10px}
+.tblock{font-size:10px}
+.time{font-size:12px}
+.mark-row button{font-size:11px}
+.export-status{font-size:10px}
+.upload strong{font-size:12px}
+.upload small{font-size:10px}
+.transport-row button{font-size:12px}
+
+/* Give more breathing room to controls after enlarging text */
+.section{margin-bottom:19px}
+.field{margin-bottom:12px}
+.tabpane{padding:16px}
+.choice{padding:12px}
+.switch-card{padding:12px 13px}
+.upload{padding:14px 10px}
+
+/* Slightly larger video typography controls by default */
+#fontSize{accent-color:var(--primary)}
+
+@media(max-width:920px){
+  body{font-size:15px}
+  .brand h1{font-size:15px}
+  .brand small{font-size:10px}
+  .tabbtn{font-size:10px;padding:9px 3px}
+  .section-title{font-size:10px}
+  .field label{font-size:10px}
+  .field input,.field select,.field textarea{font-size:16px} /* prevents iOS zoom and improves readability */
+  .note,.status{font-size:10px}
+  .switch-copy b{font-size:11px}
+  .switch-copy span{font-size:9.5px}
+  .chip{font-size:9.5px}
+  .choice b{font-size:11px}
+  .choice small{font-size:9.5px}
+  .smallbtn{font-size:10px}
+  .upload strong{font-size:11px}
+  .upload small{font-size:9.5px}
+  .bottombar button{font-size:10px}
+}
+@media(max-width:520px){
+  .tabbtn{font-size:9px}
+  .brand h1{font-size:14px}
+  .preview-head b{font-size:12px}
+  .field input,.field select,.field textarea{font-size:16px}
+  .choice-grid{grid-template-columns:1fr}
+  .grid3{grid-template-columns:1fr 1fr}
+}
+
 </style>
 </head>
 <body>
@@ -229,7 +307,7 @@ input[type=range]{width:100%;accent-color:var(--primary)}
 <header>
   <div class="brand">
     <div class="logo">K</div>
-    <div><h1>Karaoke Cover Studio Pro V7.2</h1><small>Creator Suite • Multi Platform</small></div>
+    <div><h1>Karaoke Cover Studio Pro V7.3</h1><small>Creator Suite • Multi Platform</small></div>
   </div>
   <div class="header-actions">
     <button class="btn" id="undoTop">Undo</button>
@@ -414,7 +492,7 @@ input[type=range]{width:100%;accent-color:var(--primary)}
     <div class="section">
       <div class="section-title">TEXT & ANIMATION</div>
       <div class="grid2">
-        <div class="field"><label>Font size <span id="fontVal">58</span></label><input id="fontSize" type="range" min="32" max="96" value="58"></div>
+        <div class="field"><label>Font size <span id="fontVal">72</span></label><input id="fontSize" type="range" min="40" max="130" value="72"></div>
         <div class="field"><label>Posisi Y <span id="yVal">72%</span></label><input id="lyricY" type="range" min="38" max="88" value="72"></div>
       </div>
       <div class="grid2">
@@ -577,7 +655,7 @@ const PRESETS={
 };
 const st={
  platform:'tiktok',w:1080,h:1920,title:'Judul Lagu',artist:'Nama Penyanyi',
- font:58,y:72,text:'#ffffff',hi:'#ffd84d',dark:28,bgZoom:100,bgX:0,bgY:0,bgBlur:0,
+ font:72,y:72,text:'#ffffff',hi:'#ffd84d',dark:28,bgZoom:100,bgX:0,bgY:0,bgBlur:0,
  safe:false,textAnim:'fade',lyricLayout:'auto',template:'cinematic',
  volume:100,trimStart:0,trimEnd:0,fadeIn:0,fadeOut:0,audioDelay:0,loopVideo:true,
  visualizerType:'bars',visualizerIntensity:80,
@@ -644,7 +722,7 @@ function syncControlsFromState(){
 }
 function syncState(){
  st.title=$('#titleInput').value||'Judul Lagu';st.artist=$('#artistInput').value||'Nama Penyanyi';
- st.font=n($('#fontSize').value,58);st.y=n($('#lyricY').value,72);st.text=$('#textColor').value;st.hi=$('#highlightColor').value;
+ st.font=n($('#fontSize').value,72);st.y=n($('#lyricY').value,72);st.text=$('#textColor').value;st.hi=$('#highlightColor').value;
  st.dark=n($('#darkness').value,28);st.bgZoom=n($('#bgZoom').value,100);st.bgX=n($('#bgX').value,0);st.bgY=n($('#bgY').value,0);st.bgBlur=n($('#bgBlur').value,0);
  st.safe=$('#safeArea').checked;st.textAnim=$('#textAnim').value;st.lyricLayout=$('#lyricLayout').value;st.volume=n($('#audioVolume').value,100);
  st.trimStart=n($('#trimStart').value,0);st.trimEnd=n($('#trimEnd').value,0);st.fadeIn=n($('#fadeIn').value,0);st.fadeOut=n($('#fadeOut').value,0);
@@ -854,20 +932,20 @@ function draw(){
  const d=projectEnd(),introEnd=effectiveStart()+st.introDuration,outroStart=Math.max(effectiveStart(),d-st.outroDuration);
  if(st.intro&&t<introEnd){
   const p=clamp((t-effectiveStart())/Math.max(.1,st.introDuration),0,1);ctx.save();ctx.globalAlpha=Math.min(1,p*2);
-  ctx.fillStyle='rgba(0,0,0,.18)';ctx.fillRect(0,0,W,H);ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font=`800 ${Math.max(34,W*.055)}px Inter,Arial`;ctx.fillText(st.title,W/2,H*.45);
-  ctx.font=`500 ${Math.max(20,W*.028)}px Inter,Arial`;ctx.fillText(st.artist,W/2,H*.45+Math.max(50,H*.06));ctx.restore()
+  ctx.fillStyle='rgba(0,0,0,.18)';ctx.fillRect(0,0,W,H);ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font=`800 ${Math.max(44,W*.065)}px Inter,Arial`;ctx.fillText(st.title,W/2,H*.45);
+  ctx.font=`500 ${Math.max(24,W*.034)}px Inter,Arial`;ctx.fillText(st.artist,W/2,H*.45+Math.max(50,H*.06));ctx.restore()
  }else if(st.outro&&t>=outroStart){
-  ctx.save();ctx.fillStyle='rgba(0,0,0,.22)';ctx.fillRect(0,0,W,H);ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font=`800 ${Math.max(30,W*.045)}px Inter,Arial`;ctx.fillText(st.outroText,W/2,H*.5);ctx.restore()
+  ctx.save();ctx.fillStyle='rgba(0,0,0,.22)';ctx.fillRect(0,0,W,H);ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font=`800 ${Math.max(40,W*.055)}px Inter,Arial`;ctx.fillText(st.outroText,W/2,H*.5);ctx.restore()
  }else{
-  const landscape=W>H,titleSize=Math.max(28,Math.min(48,W*(landscape?.025:.043))),titleY=landscape?H*.09:H*.06;
+  const landscape=W>H,titleSize=Math.max(34,Math.min(62,W*(landscape?.031:.052))),titleY=landscape?H*.09:H*.06;
   ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font=`800 ${titleSize}px Inter,Arial`;ctx.fillText(st.title,W/2,titleY);ctx.fillStyle='rgba(255,255,255,.78)';ctx.font=`500 ${Math.max(18,titleSize*.58)}px Inter,Arial`;ctx.fillText(st.artist,W/2,titleY+titleSize*.85);
 
   const idx=currentLine(t),line=idx>=0?lyrics[idx]:lyrics[0],prev=idx>0?lyrics[idx-1]:null,next=idx>=0?lyrics[idx+1]:lyrics[1];
-  const base=lyricBaseY(),eff=Math.max(28,st.font*(W>H?.95:1)*Math.max(.72,Math.min(1.45,W/1080))),side=W>H?W*.12:W*.07;
+  const base=lyricBaseY(),eff=Math.max(36,st.font*(W>H?1.02:1.06)*Math.max(.78,Math.min(1.60,W/1080))),side=W>H?W*.11:W*.065;
   if(line){
    const tr=animTransform(t,line);ctx.save();ctx.globalAlpha=tr.alpha;ctx.translate(W/2,base+tr.dy);ctx.scale(tr.scale,tr.scale);ctx.translate(-W/2,-base);ctx.filter=tr.blur?`blur(${tr.blur}px)`:'none';
    if(tr.glow){ctx.shadowColor=st.hi;ctx.shadowBlur=tr.glow}
-   if(prev&&karaokeMode!=='twoLine'){ctx.fillStyle='rgba(255,255,255,.5)';ctx.font=`600 ${Math.max(18,eff*.5)}px Inter,Arial`;ctx.fillText(prev.text,W/2,base-eff*1.6)}
+   if(prev&&karaokeMode!=='twoLine'){ctx.fillStyle='rgba(255,255,255,.5)';ctx.font=`600 ${Math.max(22,eff*.56)}px Inter,Arial`;ctx.fillText(prev.text,W/2,base-eff*1.6)}
    const font=`800 ${eff}px Inter,Arial`,lines=wrap(line.text,W-side*2,font);ctx.font=font;ctx.lineWidth=Math.max(4,eff*.13);ctx.strokeStyle='rgba(0,0,0,.42)';
    lines.forEach((txt,j)=>{const y=base+j*eff*1.18;if(style!=='B')ctx.strokeText(txt,W/2,y);
      if(karaokeMode==='word'&&line.words?.length){
@@ -878,7 +956,7 @@ function draw(){
        ctx.fillStyle=st.text;ctx.fillText(txt,W/2,y);const p=clamp((t-line.start)/Math.max(.1,line.end-line.start),0,1);ctx.save();ctx.beginPath();ctx.rect(side,y-eff,(W-side*2)*p,eff*1.4);ctx.clip();ctx.fillStyle=st.hi;ctx.fillText(txt,W/2,y);ctx.restore()
      }else{ctx.fillStyle=idx>=0?st.hi:st.text;ctx.fillText(txt,W/2,y)}
    });
-   if(next){ctx.fillStyle='rgba(255,255,255,.55)';ctx.font=`600 ${Math.max(18,eff*.5)}px Inter,Arial`;ctx.fillText(next.text,W/2,base+lines.length*eff*1.18+eff*.9)}
+   if(next){ctx.fillStyle='rgba(255,255,255,.55)';ctx.font=`600 ${Math.max(22,eff*.56)}px Inter,Arial`;ctx.fillText(next.text,W/2,base+lines.length*eff*1.18+eff*.9)}
    ctx.restore()
   }
  }
