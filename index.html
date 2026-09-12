@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Karaoke Cover Studio Pro V7.1</title>
+<title>Karaoke Cover Studio Pro V7.2</title>
 <style>
 :root{
   --bg:#f6f7fb; --card:#fff; --card2:#fbfcff; --line:#e7e9f0; --text:#171b25; --muted:#747d8b;
@@ -78,7 +78,7 @@ input[type=range]{width:100%;accent-color:var(--primary)}
 .editor-card{overflow:hidden}
 .tabbar{
   display:grid;grid-template-columns:repeat(6,1fr);gap:4px;padding:7px;border-bottom:1px solid var(--line);background:#fbfbfd;
-  position:sticky;top:78px;z-index:20
+  position:relative;top:auto;z-index:20
 }
 .tabbtn{border:0;background:transparent;border-radius:10px;padding:9px 4px;font-size:9px;color:#6d7684}
 .tabbtn.active{background:var(--soft);color:#4d54c6;font-weight:800}
@@ -170,6 +170,58 @@ input[type=range]{width:100%;accent-color:var(--primary)}
   .lyric-row{grid-template-columns:54px 54px minmax(0,1fr) 27px}
   .lyric-row input{font-size:8px;padding:6px 4px}
 }
+
+/* V7.2 — editor header collision fix */
+.editor-card{
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+  min-height:0;
+}
+.tabbar{
+  position:relative;
+  top:auto;
+  z-index:25;
+  grid-row:1;
+  background:#fbfbfd;
+  border-bottom:1px solid var(--line);
+}
+.tabpane{
+  grid-row:2;
+  min-height:0;
+  max-height:calc(100vh - 150px);
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  padding-top:16px;
+}
+.tabpane.active{display:block}
+.tabpane>.section:first-child{
+  padding-top:0;
+  margin-top:0;
+}
+@media(min-width:921px){
+  .editor-card{
+    max-height:calc(100vh - 92px);
+  }
+  .tabbar{
+    position:sticky;
+    top:0;
+  }
+}
+@media(max-width:920px){
+  .editor-card{display:block;max-height:none}
+  .tabbar{
+    position:sticky;
+    top:0;
+    z-index:30;
+  }
+  .tabpane{
+    max-height:none;
+    overflow:visible;
+    padding-top:14px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -177,7 +229,7 @@ input[type=range]{width:100%;accent-color:var(--primary)}
 <header>
   <div class="brand">
     <div class="logo">K</div>
-    <div><h1>Karaoke Cover Studio Pro V7.1</h1><small>Creator Suite • Multi Platform</small></div>
+    <div><h1>Karaoke Cover Studio Pro V7.2</h1><small>Creator Suite • Multi Platform</small></div>
   </div>
   <div class="header-actions">
     <button class="btn" id="undoTop">Undo</button>
